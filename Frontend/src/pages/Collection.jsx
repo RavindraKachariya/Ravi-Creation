@@ -71,79 +71,84 @@ const Collection = () => {
     }, [products, category, subCategory, search, showSearch, sortType]);
 
     return (
-        <>
-            <div className="flex flex-col sm:flex-row gap-6 pt-10 border-t">
+        <div className="px-4 sm:px-10 pt-10 border-t">
 
-                {/* LEFT SIDE FILTER */}
-                <div className="min-w-60">
+            <div className="flex flex-col lg:flex-row gap-10">
 
-                    <p
+                {/* LEFT FILTER PANEL */}
+                <div className="lg:w-64">
+
+                    <div
                         onClick={() => setShowFilter(!showFilter)}
-                        className="my-2 text-xl flex items-center gap-2 cursor-pointer"
+                        className="flex justify-between items-center cursor-pointer lg:cursor-default"
                     >
-                        FILTERS
+                        <h2 className="text-xl font-semibold text-gray-800">
+                            Filters
+                        </h2>
                         <img
-                            className={`h-3 sm:hidden transition-transform ${showFilter ? "rotate-90" : ""
-                                }`}
+                            className={`h-3 lg:hidden transition-transform ${showFilter ? "rotate-90" : ""}`}
                             src={assets.dropdown_icon}
                             alt=""
                         />
-                    </p>
-
-                    {/* CATEGORY */}
-                    <div
-                        className={`border border-gray-300 px-5 py-4 mt-6 rounded ${showFilter ? "" : "hidden"
-                            } sm:block`}
-                    >
-                        <p className="mb-3 text-sm font-semibold">CATEGORIES</p>
-
-                        <div className="flex flex-col gap-2 text-sm text-gray-700">
-                            {["Men", "Women", "Kids"].map((item) => (
-                                <label key={item} className="flex items-center gap-2 cursor-pointer">
-                                    <input
-                                        type="checkbox"
-                                        value={item}
-                                        onChange={toggleCategory}
-                                        className="w-4 h-4"
-                                    />
-                                    {item}
-                                </label>
-                            ))}
-                        </div>
                     </div>
 
-                    {/* TYPE */}
-                    <div
-                        className={`border border-gray-300 px-5 py-4 mt-6 rounded ${showFilter ? "" : "hidden"
-                            } sm:block`}
-                    >
-                        <p className="mb-3 text-sm font-semibold">TYPE</p>
+                    <div className={`${showFilter ? "block" : "hidden"} lg:block mt-6 space-y-6`}>
 
-                        <div className="flex flex-col gap-2 text-sm text-gray-700">
-                            {["Topwear", "Bottomwear", "Winterwear"].map((item) => (
-                                <label key={item} className="flex items-center gap-2 cursor-pointer">
-                                    <input
-                                        type="checkbox"
-                                        value={item}
-                                        onChange={toggleSubCategory}
-                                        className="w-4 h-4"
-                                    />
-                                    {item}
-                                </label>
-                            ))}
+                        {/* CATEGORY */}
+                        <div className="bg-white rounded-2xl shadow-sm p-5">
+                            <p className="mb-4 text-sm font-semibold text-gray-800">
+                                Categories
+                            </p>
+
+                            <div className="flex flex-col gap-3 text-sm text-gray-700">
+                                {["Car Hanger"].map((item) => (
+                                    <label key={item} className="flex items-center gap-3 cursor-pointer">
+                                        <input
+                                            type="checkbox"
+                                            value={item}
+                                            onChange={toggleCategory}
+                                            className="w-4 h-4 accent-black"
+                                        />
+                                        {item}
+                                    </label>
+                                ))}
+                            </div>
                         </div>
+
+                        {/* TYPE */}
+                        <div className="bg-white rounded-2xl shadow-sm p-5">
+                            <p className="mb-4 text-sm font-semibold text-gray-800">
+                                Type
+                            </p>
+
+                            <div className="flex flex-col gap-3 text-sm text-gray-700">
+                                {["Car Accessories"].map((item) => (
+                                    <label key={item} className="flex items-center gap-3 cursor-pointer">
+                                        <input
+                                            type="checkbox"
+                                            value={item}
+                                            onChange={toggleSubCategory}
+                                            className="w-4 h-4 accent-black"
+                                        />
+                                        {item}
+                                    </label>
+                                ))}
+                            </div>
+                        </div>
+
                     </div>
                 </div>
 
-                {/* RIGHT SIDE PRODUCTS */}
+                {/* RIGHT PRODUCTS */}
                 <div className="flex-1">
 
-                    <div className="flex justify-between items-center mb-4">
+                    <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-4 mb-8">
+
                         <Title text1="ALL" text2="COLLECTIONS" />
 
                         <select
                             onChange={(e) => setSortType(e.target.value)}
-                            className="border border-gray-300 text-sm px-3 py-1 rounded"
+                            className="border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-black transition"
                         >
                             <option value="relevant">Sort by: Relevant</option>
                             <option value="low-high">Sort by: Low to High</option>
@@ -152,7 +157,7 @@ const Collection = () => {
                     </div>
 
                     {/* PRODUCT GRID */}
-                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 gap-y-6">
+                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                         {filteredProducts.length > 0 ? (
                             filteredProducts.map((item) => (
                                 <ProductItem
@@ -164,7 +169,7 @@ const Collection = () => {
                                 />
                             ))
                         ) : (
-                            <p className="col-span-full text-gray-500 text-center">
+                            <p className="col-span-full text-center text-gray-500 py-10">
                                 No products found.
                             </p>
                         )}
@@ -172,7 +177,7 @@ const Collection = () => {
 
                 </div>
             </div>
-        </>
+        </div>
     );
 };
 

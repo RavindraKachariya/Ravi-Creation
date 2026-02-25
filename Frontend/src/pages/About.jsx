@@ -5,36 +5,82 @@ import { assets } from '../assets/assets';
 
 const About = () => {
     return (
-        <div>
-            <div className='text-2xl text-center pt-8 border-t'>
+        <div className="px-4 sm:px-10">
+
+            {/* Heading */}
+            <div className='text-2xl text-center pt-10 border-t'>
                 <Title text1={'ABOUT'} text2={'US'} />
             </div>
-            <div className='my-10 flex flex-col md:flex-row gap-16'>
-                <img className='w-full md:max-w-[450px]' src={assets.about_img} alt="" />
-                <div className='flex flex-col justify-center gap-6 md:w-2/4 text-gray-600'>
-                    <p>Forever was born out of a passion for innovation and a desire to revolutionize the way people shop online. Our journey began with a simple idea: to provide a platform where customers can easily discover, explore, and purchase a wide range of products from the comfort of their homes.</p>
-                    <p>Since our inception, we've worked tirelessly to curate a diverse selection of high-quality products that cater to every taste and preference. From fashion and beauty to electronics and home essentials, we offer an extensive collection sourced from trusted brands and suppliers.</p>
-                    <b className='text-gray-800'>Our Mission</b>
-                    <p>Our mission at Forever is to empower customers with choice, convenience, and confidence. We're dedicated to providing a seamless shopping experience that exceeds expectations, from browsing and ordering to delivery and beyond.</p>
+
+            {/* About Section */}
+            <div className='my-14 flex flex-col md:flex-row items-center gap-14'>
+
+                {/* Image */}
+                <img
+                    className='w-full md:max-w-[480px] rounded-2xl shadow-md'
+                    src={assets.about_img}
+                    alt="About Ravi Creation"
+                />
+
+                {/* Content */}
+                <div className='flex flex-col justify-center gap-6 md:w-2/4 text-gray-600 leading-relaxed'>
+
+                    <p>
+                        Our journey began with a simple passion — creating beautiful handmade car hanger dream catchers that bring positivity and elegance to every drive. What started as a small creative idea has grown into a brand dedicated to handcrafted car decor that reflects art, culture, and spiritual charm.
+                    </p>
+
+                    <p>
+                        Every car hanger is carefully handmade using quality threads, beads, and decorative elements. We focus on detail, balance, and finishing to ensure that each piece adds a unique and premium touch to your car interior.
+                    </p>
+
+                    <div>
+                        <h3 className='text-xl font-semibold text-gray-800 mb-2'>
+                            Our Mission
+                        </h3>
+                        <p>
+                            Our mission is to spread positive vibes and aesthetic beauty through handcrafted car accessories. We believe your car is more than just a vehicle — it’s your personal space. Our goal is to make that space stylish, peaceful, and inspiring.
+                        </p>
+                    </div>
+
                 </div>
             </div>
-            <div className='text-xl py-4'>
+
+            {/* Why Choose Us */}
+            <div className='text-xl text-center py-6'>
                 <Title text1={'WHY'} text2={'CHOOSE US'} />
             </div>
-            <div className='flex flex-col md:flex-row text-sm mb-20'>
-                <div className='border px-10 md:px-16 py-8 sm:py-20 flex flex-col gap-5'>
-                    <b>Quality Assurance:</b>
-                    <p className='text-gray-600'>We meticulously select ond vet each product to ensure it meets our stringent quoty standards.</p>
+
+            <div className='grid gap-6 md:grid-cols-3 mb-24'>
+
+                <div className='bg-white rounded-2xl shadow-sm hover:shadow-md transition p-8 flex flex-col gap-4'>
+                    <h4 className='font-semibold text-lg text-gray-800'>
+                        Handmade with Love
+                    </h4>
+                    <p className='text-gray-600 text-sm leading-relaxed'>
+                        Each car hanger is crafted with care and attention to detail, ensuring uniqueness and authenticity in every piece.
+                    </p>
                 </div>
-                <div className='border px-10 md:px-16 py-8 sm:py-20 flex flex-col gap-5'>
-                    <b>Convenience::</b>
-                    <p className='text-gray-600'>With our user-friendly interface and hassle free ordering process, shopping has never been easier.</p>
+
+                <div className='bg-white rounded-2xl shadow-sm hover:shadow-md transition p-8 flex flex-col gap-4'>
+                    <h4 className='font-semibold text-lg text-gray-800'>
+                        Premium Quality Materials
+                    </h4>
+                    <p className='text-gray-600 text-sm leading-relaxed'>
+                        We use high-quality threads, beads, and decorative elements to create durable and long-lasting products.
+                    </p>
                 </div>
-                <div className='border px-10 md:px-16 py-8 sm:py-20 flex flex-col gap-5'>
-                    <b>Exceptional Customer Service:</b>
-                    <p className='text-gray-600'>Our team of dedicated professionals is here to assist you the way, ensuring your satisfaction is our top priority</p>
+
+                <div className='bg-white rounded-2xl shadow-sm hover:shadow-md transition p-8 flex flex-col gap-4'>
+                    <h4 className='font-semibold text-lg text-gray-800'>
+                        Elegant & Spiritual Design
+                    </h4>
+                    <p className='text-gray-600 text-sm leading-relaxed'>
+                        Our designs are created to add aesthetic beauty and positive energy to your car interior.
+                    </p>
                 </div>
+
             </div>
+
             <NewsletterBox />
         </div>
     )

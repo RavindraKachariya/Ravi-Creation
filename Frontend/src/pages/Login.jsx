@@ -70,25 +70,29 @@ const Login = () => {
     }, [step])
 
     return (
-        <div>
+        <div className="flex items-center justify-center px-4">
+
             <form
                 onSubmit={onSubmitHandler}
-                className='flex flex-col items-center w-[90%] sm:max-w-96 m-auto mt-14 gap-4 text-gray-800'
+                className="w-full max-w-md p-8 rounded-2xl flex flex-col gap-5"
             >
 
-                <div className='inline-flex items-center gap-2 mb-2 mt-10'>
-                    <p className='text-3xl'>{step}</p>
-                    <hr className='border-none h-[1.5px] w-8 bg-gray-800' />
+                {/* Heading */}
+                <div className="text-center">
+                    <h2 className="text-3xl font-semibold text-gray-800">{step}</h2>
+                    <p className="text-sm text-gray-500 mt-1">
+                        Welcome to Ravi Creation
+                    </p>
                 </div>
 
                 {/* SIGN UP */}
                 {step === 'Sign Up' && (
                     <input
                         type="text"
-                        placeholder="Name"
+                        placeholder="Full Name"
                         value={name}
                         onChange={(e) => setName(e.target.value)}
-                        className='w-full px-3 py-2 border border-gray-800'
+                        className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-black transition"
                         required
                     />
                 )}
@@ -97,10 +101,10 @@ const Login = () => {
                 {(step === 'Login' || step === 'Sign Up' || step === 'Forgot Password') && (
                     <input
                         type="email"
-                        placeholder="Email"
+                        placeholder="Email Address"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
-                        className='w-full px-3 py-2 border border-gray-800'
+                        className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-black transition"
                         required
                     />
                 )}
@@ -112,7 +116,7 @@ const Login = () => {
                         placeholder="Password"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
-                        className='w-full px-3 py-2 border border-gray-800'
+                        className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-black transition"
                         required
                     />
                 )}
@@ -124,7 +128,7 @@ const Login = () => {
                         placeholder="Enter OTP"
                         value={otp}
                         onChange={(e) => setOtp(e.target.value)}
-                        className='w-full px-3 py-2 border border-gray-800'
+                        className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-black transition text-center tracking-widest"
                         required
                     />
                 )}
@@ -137,7 +141,7 @@ const Login = () => {
                             placeholder="New Password"
                             value={newPassword}
                             onChange={(e) => setNewPassword(e.target.value)}
-                            className='w-full px-3 py-2 border border-gray-800'
+                            className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-black transition"
                             required
                         />
 
@@ -146,46 +150,60 @@ const Login = () => {
                             placeholder="Confirm Password"
                             value={confirmPassword}
                             onChange={(e) => setConfirmPassword(e.target.value)}
-                            className='w-full px-3 py-2 border border-gray-800'
+                            className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-black transition"
                             required
                         />
                     </>
                 )}
 
+                {/* BUTTON */}
+                <button className="w-full bg-black text-white py-3 rounded-lg hover:bg-gray-800 transition duration-300 font-medium">
+                    {step === 'Login' && 'Sign In'}
+                    {step === 'Sign Up' && 'Create Account'}
+                    {step === 'Forgot Password' && 'Send OTP'}
+                    {step === 'Verify OTP' && 'Verify OTP'}
+                    {step === 'Reset Password' && 'Change Password'}
+                </button>
+
                 {/* BOTTOM LINKS */}
-                <div className='w-full flex justify-between text-sm'>
+                <div className="text-sm text-gray-600 text-center space-y-2">
 
                     {step === 'Login' && (
                         <>
-                            <p onClick={() => setStep('Forgot Password')} className='cursor-pointer'>
+                            <p
+                                onClick={() => setStep('Forgot Password')}
+                                className="cursor-pointer hover:text-black transition"
+                            >
                                 Forgot Password?
                             </p>
-                            <p onClick={() => setStep('Sign Up')} className='cursor-pointer'>
-                                Create Account
+
+                            <p
+                                onClick={() => setStep('Sign Up')}
+                                className="cursor-pointer hover:text-black transition"
+                            >
+                                Don’t have an account? Sign Up
                             </p>
                         </>
                     )}
 
                     {step === 'Sign Up' && (
-                        <p onClick={() => setStep('Login')} className='cursor-pointer'>
-                            Login Here
+                        <p
+                            onClick={() => setStep('Login')}
+                            className="cursor-pointer hover:text-black transition"
+                        >
+                            Already have an account? Login
                         </p>
                     )}
 
                     {(step === 'Forgot Password' || step === 'Verify OTP' || step === 'Reset Password') && (
-                        <p onClick={() => setStep('Login')} className='cursor-pointer'>
+                        <p
+                            onClick={() => setStep('Login')}
+                            className="cursor-pointer hover:text-black transition"
+                        >
                             Back to Login
                         </p>
                     )}
                 </div>
-
-                <button className='bg-black text-white px-8 py-2 mt-4'>
-                    {step === 'Login' && 'Sign In'}
-                    {step === 'Sign Up' && 'Sign Up'}
-                    {step === 'Forgot Password' && 'Send OTP'}
-                    {step === 'Verify OTP' && 'Verify OTP'}
-                    {step === 'Reset Password' && 'Change Password'}
-                </button>
 
             </form>
         </div>
