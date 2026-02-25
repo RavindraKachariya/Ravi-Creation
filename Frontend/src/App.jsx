@@ -6,9 +6,11 @@ import Contact from './pages/Contact'
 import Home from './pages/Home'
 import Login from './pages/Login'
 import Orders from './pages/Orders'
+import OrderSuccess from './pages/OrderSuccess'
 import PlaceOrder from './pages/PlaceOrder'
 import Product from './pages/Product'
 import Navbar from './components/Navbar'
+import Footer from './components/Footer'
 
 const App = () => {
   return (
@@ -21,11 +23,13 @@ const App = () => {
         <Route path='/about' element={<About />} />
         <Route path='/contact' element={<Contact />} />
         <Route path='/cart' element={<Cart />} />
+        <Route path="/order-success" element={<OrderSuccess />} />
         <Route path='/orders' element={<Orders />} />
         <Route path='/place-order' element={<PlaceOrder />} />
         <Route path='/login' element={<Login />} />
         <Route path='*' element={<h1 className='text-3xl font-bold text-center mt-20'>404 Not Found</h1>} />
       </Routes>
+      <Footer />
     </div>
   )
 }
