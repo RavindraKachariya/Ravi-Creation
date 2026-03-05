@@ -1,17 +1,11 @@
-import { useContext, useEffect, useState } from 'react';
-import { ShopContext } from '../context/ShopContext'
+import { useState } from 'react';
+import { products } from '../assets/assets';
 import Title from './Title'
 import ProductItem from './ProductItem';
 
 const LatestCollection = () => {
 
-    const { products } = useContext(ShopContext)
-
-    const [latestProducts, setLatestProducts] = useState([]);
-
-    useEffect(() => {
-        setLatestProducts(products.slice(0, 10));
-    }, [products]); // Ensure that you re-fetch products if they change
+    const [latestProducts] = useState(() => products.slice(0, 10));
 
     return (
         <div className='my-10'>
@@ -28,8 +22,6 @@ const LatestCollection = () => {
                 ))}
             </div>
         </div>
-
-
     )
 }
 

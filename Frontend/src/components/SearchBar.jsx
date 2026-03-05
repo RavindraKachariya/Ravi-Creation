@@ -1,9 +1,9 @@
-import { useContext } from "react";
-import { ShopContext } from "../context/ShopContext";
+import { useSelector, useDispatch } from "react-redux";
+import { setSearch, setShowSearch } from "../store/searchSlice";
 
 const SearchBar = () => {
-
-    const { search, setSearch, showSearch, setShowSearch } = useContext(ShopContext);
+    const dispatch = useDispatch();
+    const { search, showSearch } = useSelector((state) => state.search);
 
     if (!showSearch) return null;
 
@@ -14,14 +14,14 @@ const SearchBar = () => {
 
                 <input
                     value={search}
-                    onChange={(e) => setSearch(e.target.value)}
+                    onChange={(e) => dispatch(setSearch(e.target.value))}
                     type="text"
                     placeholder="Search products..."
                     className="border px-4 py-2 w-1/2"
                 />
 
                 <button
-                    onClick={() => setShowSearch(false)}
+                    onClick={() => dispatch(setShowSearch(false))}
                     className="bg-black text-white px-4 py-2"
                 >
                     Close

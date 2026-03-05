@@ -1,14 +1,14 @@
-import React, { useState, useContext, useEffect } from "react";
-import { ShopContext } from "../context/ShopContext";
+import React, { useState, useMemo } from "react";
+import { useSelector } from "react-redux";
 import { assets } from "../assets/assets";
+import { products } from "../assets/assets";
 import Title from "../components/Title";
 import ProductItem from "../components/ProductItem";
 
 const Collection = () => {
-    const { products, search, showSearch } = useContext(ShopContext);
+    const { search } = useSelector((state) => state.search);
 
     const [showFilter, setShowFilter] = useState(false);
-    const [filteredProducts, setFilteredProducts] = useState([]);
     const [category, setCategory] = useState([]);
     const [subCategory, setSubCategory] = useState([]);
     const [sortType, setSortType] = useState("relevant");
@@ -33,14 +33,14 @@ const Collection = () => {
         );
     };
 
-    // Combined Filter + Sort Logic
-    useEffect(() => {
-        if (!products || products.length === 0) return;
+    // Combined Filter + Sort Logic using useMemo
+    const filteredProducts = useMemo(() => {
+        if (!products || products.length === 0) return [];
 
         let updatedProducts = [...products];
 
-        // Search Filter
-        if (showSearch && search) {
+        // Search Filter - always apply search filter
+        if (search) {
             updatedProducts = updatedProducts.filter((item) =>
                 item.name.toLowerCase().includes(search.toLowerCase())
             );
@@ -67,8 +67,8 @@ const Collection = () => {
             updatedProducts.sort((a, b) => b.price - a.price);
         }
 
-        setFilteredProducts(updatedProducts);
-    }, [products, category, subCategory, search, showSearch, sortType]);
+        return updatedProducts;
+    }, [search, category, subCategory, sortType]);
 
     return (
         <div className="px-4 sm:px-10 pt-10 border-t">

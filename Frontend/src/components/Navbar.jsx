@@ -1,38 +1,35 @@
 import { assets } from '../assets/assets'
 import { NavLink, Link, useNavigate } from 'react-router-dom'
-import { useState, useEffect } from 'react'
-import { ShopContext } from '../context/ShopContext'
-import { useContext } from 'react'
+import { useState } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
+import { FaHeart } from 'react-icons/fa'
+import { selectCurrentUser, logoutUser } from '../store/userSlice'
+import { getCartCount } from '../store/cartSlice'
+import { getWishlistCount } from '../store/wishlistSlice'
+import { setShowSearch } from '../store/searchSlice'
+import SearchBar from './SearchBar'
 
 const Navbar = () => {
-
     const [visible, setVisible] = useState(false)
-    const [user, setUser] = useState(null)
-    const { getCartCount } = useContext(ShopContext)
-
+    const dispatch = useDispatch()
     const navigate = useNavigate()
 
-    useEffect(() => {
-        try {
-            const storedUser = localStorage.getItem("user")
-
-            if (storedUser && storedUser !== "undefined") {
-                setUser(JSON.parse(storedUser))
-            }
-        } catch (error) {
-            console.log("Invalid user data in localStorage")
-            setUser(null)
-        }
-    }, [])
+    // Redux state
+    const user = useSelector(selectCurrentUser)
+    const cartCount = useSelector(getCartCount())
+    const wishlistCount = useSelector(getWishlistCount())
 
     const handleLogout = () => {
-        localStorage.removeItem("user")
-        setUser(null)
+        dispatch(logoutUser())
         navigate('/')
     }
 
+    const handleSearchClick = () => {
+        dispatch(setShowSearch(true))
+    }
+
     return (
-        <div className='flex items-center justify-between py-4 px-4 md:px-8 font-medium shadow-sm'>
+        <div className='flex items-center justify-between md:px-8 font-medium'>
 
             {/* LOGO */}
             <Link to='/' className='group'>
@@ -68,6 +65,7 @@ const Navbar = () => {
 
                 {/* SEARCH */}
                 <img
+                    onClick={handleSearchClick}
                     src={assets.search_icon}
                     alt="Search"
                     className='w-5 cursor-pointer hover:scale-110 transition'
@@ -77,7 +75,7 @@ const Navbar = () => {
                 <div className='relative group'>
 
                     <img
-                        onClick={() => !user && navigate('/login')}
+                        onClick={() => !user ? navigate('/login') : navigate('/profile')}
                         src={assets.profile_icon}
                         alt="User"
                         className='w-5 cursor-pointer hover:scale-110 transition'
@@ -92,6 +90,13 @@ const Navbar = () => {
                             <div className='px-4 py-2 text-sm text-gray-700 border-b font-medium'>
                                 {user.name}
                             </div>
+
+                            <button
+                                onClick={() => navigate('/profile')}
+                                className='w-full text-left px-4 py-2 text-sm hover:bg-gray-100 transition'
+                            >
+                                My Profile
+                            </button>
 
                             <button
                                 onClick={() => navigate('/orders')}
@@ -111,6 +116,17 @@ const Navbar = () => {
                     )}
                 </div>
 
+                {/* WISHLIST */}
+                <Link to='/wishlist' className='relative'>
+                    <FaHeart className='w-5 h-5 cursor-pointer hover:scale-110 transition' />
+
+                    {wishlistCount > 0 && (
+                        <span className='absolute -top-2 -right-2 bg-red-500 text-white text-xs w-5 h-5 flex items-center justify-center rounded-full animate-pulse'>
+                            {wishlistCount}
+                        </span>
+                    )}
+                </Link>
+
                 {/* CART */}
                 <Link to='/cart' className='relative'>
                     <img
@@ -119,9 +135,9 @@ const Navbar = () => {
                         className='w-5 cursor-pointer hover:scale-110 transition'
                     />
 
-                    {getCartCount() > 0 && (
+                    {cartCount > 0 && (
                         <span className='absolute -top-2 -right-2 bg-black text-white text-xs w-5 h-5 flex items-center justify-center rounded-full animate-pulse'>
-                            {getCartCount()}
+                            {cartCount}
                         </span>
                     )}
                 </Link>

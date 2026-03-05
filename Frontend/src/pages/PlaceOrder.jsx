@@ -1,24 +1,18 @@
-import React, { useContext, useState } from 'react'
+import React, { useState } from 'react'
 import Title from '../components/Title'
 import CartTotal from '../components/CartTotal'
-import { ShopContext } from '../context/ShopContext'
+import { useSelector, useDispatch } from 'react-redux'
+import { products } from '../assets/assets'
+import { clearCart } from '../store/cartSlice'
+import { addOrder } from '../store/ordersSlice'
 import { toast } from 'react-toastify'
-import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
 
 const PlaceOrder = () => {
-
     const navigate = useNavigate()
-
-    const {
-        backendUrl,
-        token,
-        cartItems,
-        setCartItems,
-        getCartAmount,
-        delivery_fee,
-        products
-    } = useContext(ShopContext)
+    const dispatch = useDispatch()
+    const cartItems = useSelector((state) => state.cart.cartItems)
+    const delivery_fee = 10
 
     const [paymentMethod, setPaymentMethod] = useState("COD")
 
@@ -39,16 +33,26 @@ const PlaceOrder = () => {
         setFormData(data => ({ ...data, [name]: value }))
     }
 
-    const onSubmitHandler = async (e) => {
+    // Calculate cart amount
+    const getCartAmount = () => {
+        let totalAmount = 0;
+        for (const items in cartItems) {
+            for (const size in cartItems[items]) {
+                if (cartItems[items][size] > 0) {
+                    const itemInfo = products.find((product) => product._id === items);
+                    if (itemInfo) {
+                        totalAmount += itemInfo.price * cartItems[items][size];
+                    }
+                }
+            }
+        }
+        return totalAmount;
+    };
+
+    const onSubmitHandler = (e) => {
         e.preventDefault()
 
         try {
-
-            if (!token) {
-                toast.error("Please login first")
-                return navigate('/login')
-            }
-
             let orderItems = []
 
             for (const itemId in cartItems) {
@@ -72,28 +76,21 @@ const PlaceOrder = () => {
             }
 
             const orderData = {
+                id: Date.now(),
                 address: formData,
-                items: orderItems,
-                amount: getCartAmount() + delivery_fee,
-                paymentMethod
+                items: cartItems,
+                total: getCartAmount() + delivery_fee,
+                paymentMethod,
+                date: new Date().toLocaleString(),
+                status: "Order Confirmed"
             }
 
-            const response = await axios.post(
-                backendUrl + '/api/order/place',
-                orderData,
-                { headers: { token } }
-            )
+            dispatch(addOrder(orderData))
+            dispatch(clearCart())
+            toast.success("Order Placed Successfully 🎉")
+            navigate('/orders')
 
-            if (response.data.success) {
-                setCartItems({})
-                localStorage.removeItem("cartItems")
-                toast.success("Order Placed Successfully 🎉")
-                navigate('/orders')
-            } else {
-                toast.error(response.data.message)
-            }
-
-        } catch (error) {
+        } catch {
             toast.error("Order Failed")
         }
     }

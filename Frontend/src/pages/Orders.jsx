@@ -1,79 +1,63 @@
-import React, { useContext, useEffect, useState } from 'react'
-import { ShopContext } from '../context/ShopContext'
+import React from 'react'
+import { useSelector } from 'react-redux'
+import { products } from '../assets/assets'
+import { selectOrders } from '../store/ordersSlice'
 import Title from '../components/Title'
-import axios from 'axios'
 
 const Orders = () => {
-
-    const { backendUrl, token, currency } = useContext(ShopContext)
-    const [orders, setOrders] = useState([])
-
-    const fetchOrders = async () => {
-        try {
-            if (!token) return
-
-            const response = await axios.post(
-                backendUrl + '/api/order/userOrders',
-                {},
-                { headers: { token } }
-            )
-
-            if (response.data.success) {
-                setOrders(response.data.orders.reverse())
-            }
-
-        } catch (error) {
-            console.log(error)
-        }
-    }
-
-    useEffect(() => {
-        fetchOrders()
-    }, [token])
+    const orders = useSelector(selectOrders)
 
     return (
-        <div className='max-w-6xl mx-auto px-4 py-10'>
+        <div className='border-t pt-10'>
+            <div className='text-2xl mb-10'>
+                <Title text1={'My'} text2={'Orders'} />
+            </div>
 
-            <Title text1="MY" text2="ORDERS" />
-
-            {orders.length === 0 && (
-                <p className='mt-6 text-gray-500'>No Orders Found</p>
-            )}
-
-            {orders.map((order, index) => (
-                <div key={index} className='bg-white shadow-md rounded-xl p-6 mt-6'>
-
-                    <div className='flex justify-between mb-4'>
-                        <p className='font-semibold'>
-                            Order Date: {new Date(order.date).toLocaleString()}
-                        </p>
-                        <span className='text-green-600 font-medium'>
-                            {order.status}
-                        </span>
-                    </div>
-
-                    {order.items.map((item, i) => (
-                        <div key={i} className='flex gap-5 border-t pt-4 mt-4'>
-
-                            <img src={item.images?.[0]} className='w-20 rounded' />
-
-                            <div>
-                                <p className='font-semibold'>{item.name}</p>
-                                <p>{currency}{item.price}</p>
-                                <p>Qty: {item.quantity}</p>
-                                <p>Size: {item.size}</p>
+            {orders.length === 0 ? (
+                <div className='text-center py-16 text-gray-500 text-lg'>
+                    You haven't placed any orders yet.
+                </div>
+            ) : (
+                <div className='space-y-6'>
+                    {orders.map((order, index) => (
+                        <div key={index} className='bg-white rounded-2xl shadow-sm p-6'>
+                            <div className='flex justify-between items-center mb-4'>
+                                <div>
+                                    <p className='font-semibold text-gray-800'>Order #{order.id}</p>
+                                    <p className='text-sm text-gray-500'>{order.date}</p>
+                                </div>
+                                <div className='text-right'>
+                                    <p className='font-semibold text-gray-800'>₹{order.total}</p>
+                                    <p className='text-sm text-green-600'>{order.status}</p>
+                                </div>
                             </div>
 
+                            <div className='space-y-3'>
+                                {Object.entries(order.items).map(([itemId, sizes]) =>
+                                    Object.entries(sizes).map(([size, quantity]) => {
+                                        const product = products.find(p => p._id === itemId)
+                                        if (!product) return null
+
+                                        return (
+                                            <div key={`${itemId}-${size}`} className='flex items-center gap-4'>
+                                                <img
+                                                    src={product.image[0]}
+                                                    alt={product.name}
+                                                    className='w-16 h-16 object-cover rounded-lg'
+                                                />
+                                                <div>
+                                                    <p className='font-medium text-gray-800'>{product.name}</p>
+                                                    <p className='text-sm text-gray-500'>Size: {size} | Qty: {quantity}</p>
+                                                </div>
+                                            </div>
+                                        )
+                                    })
+                                )}
+                            </div>
                         </div>
                     ))}
-
-                    <div className='mt-4 border-t pt-4 text-right font-semibold'>
-                        Total: {currency}{order.amount}
-                    </div>
-
                 </div>
-            ))}
-
+            )}
         </div>
     )
 }

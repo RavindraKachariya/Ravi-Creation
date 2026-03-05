@@ -1,17 +1,17 @@
-import React, { useContext, useMemo } from 'react'
-import { ShopContext } from '../context/ShopContext'
-import Title from '../components/Title'
+import React, { useMemo } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
+import { products } from '../assets/assets'
 import { assets } from '../assets/assets'
+import { updateQuantity } from '../store/cartSlice'
+import Title from '../components/Title'
 import CartTotal from '../components/CartTotal'
 
 const Cart = () => {
-
-    const { products, currency, cartItems, updateQuantity, navigate } = useContext(ShopContext)
-
-    // Prevent crash if products not ready
-    if (!products || products.length === 0) {
-        return <div className='pt-20 text-center'>Loading Cart...</div>
-    }
+    const dispatch = useDispatch()
+    const navigate = useNavigate()
+    const cartItems = useSelector((state) => state.cart.cartItems)
+    const currency = "₹"
 
     const cartData = useMemo(() => {
         const tempData = []
@@ -28,6 +28,15 @@ const Cart = () => {
         }
         return tempData
     }, [cartItems])
+
+    const handleUpdateQuantity = (id, size, quantity) => {
+        dispatch(updateQuantity({ itemId: id, size, quantity }))
+    }
+
+    // Prevent crash if products not ready
+    if (!products || products.length === 0) {
+        return <div className='pt-20 text-center'>Loading Cart...</div>
+    }
 
     return (
         <div className='border-t pt-14 px-4 sm:px-10'>
@@ -93,7 +102,7 @@ const Cart = () => {
                                     onChange={(e) =>
                                         e.target.value === '' || e.target.value === '0'
                                             ? null
-                                            : updateQuantity(
+                                            : handleUpdateQuantity(
                                                 item._id,
                                                 item.size,
                                                 Number(e.target.value)
@@ -106,7 +115,7 @@ const Cart = () => {
                                 />
 
                                 <img
-                                    onClick={() => updateQuantity(item._id, item.size, 0)}
+                                    onClick={() => handleUpdateQuantity(item._id, item.size, 0)}
                                     src={assets.bin_icon}
                                     className='w-5 cursor-pointer hover:scale-110 transition'
                                     alt=""

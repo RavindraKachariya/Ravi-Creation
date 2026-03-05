@@ -30,7 +30,6 @@ import p_img26 from './p_img26.png'
 import p_img27 from './p_img27.png'
 import p_img28 from './p_img28.png'
 import p_img29 from './p_img29.png'
-import p_img30 from './p_img30.png'
 
 
 import logo from './logo.png'

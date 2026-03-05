@@ -1,29 +1,22 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { ShopContext } from '../context/ShopContext';
+import React, { useMemo } from 'react';
+import { products } from '../assets/assets';
 import ProductItem from './ProductItem';
 import Title from './Title';
 
 const RelatedProducts = ({ category, subCategory }) => {
 
-    const { products } = useContext(ShopContext);
-    const [related, setRelated] = useState([]);
-
-    useEffect(() => {
-
+    const related = useMemo(() => {
         if (products.length > 0 && category && subCategory) {
-
             // Filter products by category and subCategory
             const filteredProducts = products.filter(
                 (item) =>
                     item.category === category &&
                     item.subCategory === subCategory
             );
-
-            // Remove current product duplication (optional but good practice)
-            setRelated(filteredProducts.slice(0, 5));
+            return filteredProducts.slice(0, 5);
         }
-
-    }, [products, category, subCategory]);
+        return [];
+    }, [category, subCategory]);
 
     // If no related products, don't show section
     if (related.length === 0) {
@@ -47,7 +40,7 @@ const RelatedProducts = ({ category, subCategory }) => {
                         id={item._id}
                         name={item.name}
                         price={item.price}
-                        image={item.image}   // ✅ correct field
+                        image={item.image}
                     />
                 ))}
 

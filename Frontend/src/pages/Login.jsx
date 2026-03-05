@@ -1,73 +1,75 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
 import { toast } from 'react-toastify'
+import { selectCurrentUser, setUser } from '../store/userSlice'
 
 const Login = () => {
+    const [step, setStep] = useState('Login');
+    const [name, setName] = useState('');
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [otp, setOtp] = useState('');
+    const [newPassword, setNewPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
 
-    const [step, setStep] = useState('Login')
-    const [name, setName] = useState('')
-    const [email, setEmail] = useState('')
-    const [password, setPassword] = useState('')
-    const [otp, setOtp] = useState('')
-    const [newPassword, setNewPassword] = useState('')
-    const [confirmPassword, setConfirmPassword] = useState('')
-
-    const navigate = useNavigate()
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const user = useSelector(selectCurrentUser);
 
     // MAIN SUBMIT HANDLER
     const onSubmitHandler = (e) => {
-        e.preventDefault()
+        e.preventDefault();
 
         // SIGN UP
         if (step === 'Sign Up') {
-            const userData = { name, email }
-            localStorage.setItem('user', JSON.stringify(userData))
-            toast.success("Account Created Successfully")
-            navigate('/')
+            const userData = { name, email };
+            dispatch(setUser(userData));
+            toast.success("Account Created Successfully");
+            navigate('/');
         }
 
         // LOGIN
         else if (step === 'Login') {
-            const userData = { name: email.split('@')[0], email }
-            localStorage.setItem('user', JSON.stringify(userData))
-            toast.success("Login Successful")
-            navigate('/')
+            const userData = { name: email.split('@')[0], email };
+            dispatch(setUser(userData));
+            toast.success("Login Successful");
+            navigate('/');
         }
 
         // SEND OTP
         else if (step === 'Forgot Password') {
-            toast.success("OTP Sent to your Email (Demo Code: 1234)")
-            setStep('Verify OTP')
+            toast.success("OTP Sent to your Email (Demo Code: 1234)");
+            setStep('Verify OTP');
         }
 
         // VERIFY OTP
         else if (step === 'Verify OTP') {
             if (otp === '1234') {
-                toast.success("OTP Verified")
-                setStep('Reset Password')
+                toast.success("OTP Verified");
+                setStep('Reset Password');
             } else {
-                toast.error("Invalid OTP")
+                toast.error("Invalid OTP");
             }
         }
 
         // RESET PASSWORD
         else if (step === 'Reset Password') {
             if (newPassword !== confirmPassword) {
-                toast.error("Passwords do not match")
-                return
+                toast.error("Passwords do not match");
+                return;
             }
 
-            toast.success("Password Changed Successfully")
-            setStep('Login')
+            toast.success("Password Changed Successfully");
+            setStep('Login');
         }
     }
 
     useEffect(() => {
-        const user = localStorage.getItem("user")
-        if (user && step === 'Login') {
-            navigate('/')
+        if (user) {
+            navigate('/');
         }
-    }, [step])
+    }, [user, navigate]);
 
     return (
         <div className="flex items-center justify-center px-4">
@@ -181,7 +183,7 @@ const Login = () => {
                                 onClick={() => setStep('Sign Up')}
                                 className="cursor-pointer hover:text-black transition"
                             >
-                                Don’t have an account? Sign Up
+                                Don't have an account? Sign Up
                             </p>
                         </>
                     )}

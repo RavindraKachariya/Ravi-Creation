@@ -1,34 +1,30 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { ShopContext } from '../context/ShopContext';
+import React, { useMemo, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { assets } from '../assets/assets';
+import { products } from '../assets/assets';
+import { addToCart } from '../store/cartSlice';
 import RelatedProducts from '../components/RelatedProducts';
 
 const Product = () => {
-
     const { productId } = useParams();
-    const { products, currency, addToCart } = useContext(ShopContext);
+    const dispatch = useDispatch();
+    const currency = "₹";
 
-    const [productData, setProductData] = useState(null);
-    const [image, setImage] = useState('');
+    const productData = useMemo(() => {
+        return products.find((item) => item._id === productId) || null;
+    }, [productId]);
+
+    const [image, setImage] = useState(() => productData ? productData.image[0] : '');
     const [size, setSize] = useState('');
 
-    useEffect(() => {
-
-        if (products.length > 0) {
-
-            const product = products.find(
-                (item) => item._id === productId
-            );
-
-            if (product) {
-                setProductData(product);
-                setImage(product.image[0]); // ✅ correct field
-            }
-
+    const handleAddToCart = () => {
+        if (!size) {
+            alert("Select Product Size");
+            return;
         }
-
-    }, [productId, products]);
+        dispatch(addToCart({ itemId: productData._id, size }));
+    };
 
     if (!productData) {
         return <div className="text-center mt-20">Loading...</div>;
@@ -101,7 +97,7 @@ const Product = () => {
                             Select Size
                         </p>
 
-                        <div className="flex gap-3 flex-wrap">
+                        <div className="flex gap-3 flex-wrap cursor-pointer">
                             {productData.sizes.map((item, index) => (
                                 <button
                                     key={index}
@@ -120,8 +116,8 @@ const Product = () => {
 
                     {/* Add To Cart */}
                     <button
-                        onClick={() => addToCart(productData._id, size)}
-                        className="mt-8 w-full sm:w-auto bg-black text-white px-10 py-3 rounded-lg hover:bg-gray-800 transition font-medium"
+                        onClick={handleAddToCart}
+                        className="mt-8 w-full sm:w-auto bg-black text-white px-10 py-3 rounded-lg hover:bg-gray-800 transition font-medium cursor-pointer"
                     >
                         ADD TO CART
                     </button>
