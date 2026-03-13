@@ -2,7 +2,7 @@ import { assets } from '../assets/assets'
 import { NavLink, Link, useNavigate } from 'react-router-dom'
 import { useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { FaHeart } from 'react-icons/fa'
+import { CiHeart } from "react-icons/ci";
 import { selectCurrentUser, logoutUser } from '../store/userSlice'
 import { getCartCount } from '../store/cartSlice'
 import { getWishlistCount } from '../store/wishlistSlice'
@@ -118,10 +118,10 @@ const Navbar = () => {
 
                 {/* WISHLIST */}
                 <Link to='/wishlist' className='relative'>
-                    <FaHeart className='w-5 h-5 cursor-pointer hover:scale-110 transition' />
+                    <CiHeart className='w-7 h-7 text-black cursor-pointer hover:scale-110 transition' />
 
                     {wishlistCount > 0 && (
-                        <span className='absolute -top-2 -right-2 bg-red-500 text-white text-xs w-5 h-5 flex items-center justify-center rounded-full animate-pulse'>
+                        <span className='absolute -top-1 -right-1 bg-red-500 text-white text-xs w-4 h-4 flex items-center justify-center rounded-full animate-pulse'>
                             {wishlistCount}
                         </span>
                     )}
